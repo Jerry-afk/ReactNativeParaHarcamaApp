@@ -1,21 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React , {useState} from 'react';
+import { StyleSheet, Text, View, Button,ScrollView,RefreshControl} from 'react-native';
+import Product from './components/Product'
+import Products from './products.json'
 
 export default function App() {
+  const[money , SetMoney] = useState(100);
+  const [refreshing, Setrefreshing]= useState(false)
+  const onRefresh = () =>{
+    Setrefreshing(true);
+    setTimeout(()=>{
+      Setrefreshing(false)
+    },2000)
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ScrollView refreshControl={
+      <RefreshControl
+        tintColor={"red"}
+        refreshing={refreshing}
+        title={"Yükleniyor..."}
+        titleColor={"#fff"}
+        onRefresh={onRefresh}
+      />
+    } style={styles.container}>
+    {Products.map(item =>(
+      <View key={item.id} style={styles.product}>
+      <Product key={item.id} product={item}/>
+      </View>
+    ))}
+    </ScrollView> 
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#000',
+    padding:20,
+    marginTop:23
   },
+
+ product:{
+  backgroundColor:"#222",
+  padding:10,
+  marginBottom:10,
+ },
 });
